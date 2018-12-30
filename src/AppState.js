@@ -4,7 +4,7 @@ class AppState extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: null,
+            data: [],
             header: {
                 text: 'Welcome to react'
             }
@@ -22,6 +22,8 @@ class AppState extends Component {
                 })
             })
     }
+
+
 
     setAppState(newState, callback) {
         this.setState(newState, callback);

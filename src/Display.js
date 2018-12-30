@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Book from './entities/Book';
+import BookList from './BookList';
 
 class Display extends Component {
     constructor(props) {
@@ -10,6 +11,7 @@ class Display extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleChange(e) {
@@ -38,6 +40,16 @@ class Display extends Component {
             )
     }
 
+    handleDelete(e) {
+        let elemToDeleteId = e.target.parentElement.parentElement.dataset.id;
+        fetch(`http://localhost:8080/api/books/${elemToDeleteId}`, {
+            method: 'DELETE',
+
+        })
+            .then(response => response.json())
+            .then(data => this.props.setAppState({ data }));
+    }
+
     render() {
         return (
             <div>
@@ -52,13 +64,7 @@ class Display extends Component {
                     </div>
                     <input type="submit" />
                 </form>
-                {
-                    this.props.appState.data && this.props.appState.data.map(
-                        (item, idx) => (<div key={idx}>
-                            {item.id} : {item.title} - {item.author}
-                        </div>)
-                    )
-                }
+                <BookList {...this.props} handleDelete={this.handleDelete}></BookList>
             </div >
         );
     }
