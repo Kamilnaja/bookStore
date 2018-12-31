@@ -24,20 +24,26 @@ class Display extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        fetch('http://localhost:8080/api/books', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(new Book(this.state.title, this.state.author))
-        })
-            .then(response => response.json())
-            .then(data => this.props.setAppState({ data }))
-            .then(this.setState({
-                title: "",
-                author: ""
+        if (this.state.title && this.state.author) {
+            fetch('http://localhost:8080/api/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(new Book(this.state.title, this.state.author))
             })
-            )
+                .then(response => response.json())
+                .then(data => this.props.setAppState({ data }))
+                .then(this.setState({
+                    title: "",
+                    author: ""
+                })
+                )
+        } else {
+            this.props.setAppState({
+                hasError: true
+            })
+        }
     }
 
     handleDelete(e) {
@@ -47,24 +53,30 @@ class Display extends Component {
 
         })
             .then(response => response.json())
-            .then(data => this.props.setAppState({ data }));
+            .then(data => this.props.setAppState({ data }))
+
     }
 
     render() {
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
-                    <div>
-                        <label htmlFor="author">Author</label>
-                        <input type="text" value={this.state.author} onChange={this.handleChange} name="author" />
-                    </div>
-                    <div>
-                        <label htmlFor="text">Title</label>
-                        <input type="text" value={this.state.title} onChange={this.handleChange} name="title" />
-                    </div>
-                    <input type="submit" />
-                </form>
-                <BookList {...this.props} handleDelete={this.handleDelete}></BookList>
+                {!this.props.appState.hasError ?
+                    <React.Fragment>
+                        <form onSubmit={this.handleSubmit}>
+                            <div>
+                                <label htmlFor="author">Author</label>
+                                <input type="text" value={this.state.author} onChange={this.handleChange} name="author" />
+                            </div>
+                            <div>
+                                <label htmlFor="text">Title</label>
+                                <input type="text" value={this.state.title} onChange={this.handleChange} name="title" />
+                            </div>
+                            <input type="submit" />
+                        </form>
+                        <BookList {...this.props} handleDelete={this.handleDelete}></BookList>
+                    </React.Fragment> :
+                    <h1 style={{ 'color': 'red' }}>Error</h1>
+                }
             </div >
         );
     }

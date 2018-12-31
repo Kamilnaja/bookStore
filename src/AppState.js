@@ -4,10 +4,8 @@ class AppState extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            header: {
-                text: 'Welcome to react'
-            }
+            hasError: false,
+            data: []
         }
         this.setAppState = this.setAppState.bind(this);
     }
@@ -18,12 +16,10 @@ class AppState extends Component {
             .then(data => this.setAppState({ data }))
             .catch(() => {
                 this.setAppState({
-                    isError: true
+                    hasError: true
                 })
             })
     }
-
-
 
     setAppState(newState, callback) {
         this.setState(newState, callback);
