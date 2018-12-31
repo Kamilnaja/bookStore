@@ -1,22 +1,8 @@
+import Author from './Author';
+
 export default class Book {
-    constructor(nTitle, nAuthor) {
+    constructor(nTitle, firstName, lastName, pseudo) {
         this.title = nTitle;
-        this.author = nAuthor;
-    }
-
-    setTtle(nTitle) {
-        this.title = nTitle;
-    }
-
-    getTitle() {
-        return this.title;
-    }
-
-    setAuthor(nAuthor) {
-        this.author = nAuthor;
-    }
-
-    getAuthor() {
-        return this.nAuthor;
+        this.author = new Author(firstName, lastName, pseudo);
     }
 }
